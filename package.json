@@ -1,0 +1,29 @@
+{
+  "name": "errformance",
+  "version": "0.0.0",
+  "keywords": [
+    "assert",
+    "error",
+    "disabling"
+  ],
+  "author": "Raffaele Balsamo <raffaelebalsamo91@gmail.com>",
+  "description": "Permette di decidere se utilizzare assert o throw error in base a configurazione iniziale, e di poter disabilitare gli assert ad esempio in base all'ambiente per migliorare le performance in produzione.",
+  "scripts": {
+    "test": "NODE_ENV=dev node ./node_modules/mocha/bin/mocha",
+    "windows test": "SET NODE_ENV=dev& node ./node_modules/mocha/bin/mocha"
+  },
+  "bugs": {
+    "url": "https://github.com/CitySeventeen/Errformance/issues"
+  },
+  "homepage": "https://github.com/CitySeventeen/Errformance#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CitySeventeen/Errformance.git"
+  },
+  "main": "./index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0"
+  }
+}

@@ -85,7 +85,7 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction){
         expect(()=>{Errformance(tipo);}).to.throw(/configurazione errata. deve essere stringa o callback/);
       });
     }
-    for(let tipo of [[], ['stringa'], {}]){
+    for(let tipo of [[], ['stringa'], 1, 0, -5, true, false, {}]){
       it(`Errformance restituisce errore con Errformer(tipo valido, ${util.inspect(tipo)}`, () => {
         expect(()=>{Errformance('tipovalido', tipo);}).to.throw(/configurazione errata. deve essere stringa o callback/);
       });
@@ -123,12 +123,12 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction){
     describe('disabilitazione assert ed error', () => {
       beforeEach(()=>{
         process.env.NODE_ENV = AMBIENTE;
-        process.env.DISABLING_ERRFORMER = false;
+        process.env.DISABLING_ERRFORMANCE = 'false';
         forceRequireSupport(t.support);
       });
       afterEach(()=>{
         process.env.NODE_ENV = AMBIENTE;
-        process.env.DISABLING_ERRFORMER = false;
+        process.env.DISABLING_ERRFORMANCE = 'false';
       });
       
       describe('disabilitazione solo assert ed error attivo con Errformance(prod)', () => {
@@ -156,13 +156,13 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction){
           expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);
         });
         it('assert ed error disabilitato se disabling_errformance = true e ambiente prod', () => {
-          changeNODE_ENV(t.env_that_causes_assert_disabling); changeENV('DISABLING_ERRFORMANCE', true);
+          changeNODE_ENV(t.env_that_causes_assert_disabling); changeENV('DISABLING_ERRFORMANCE', 'true');
           const e = require(t.support)[tipo_test];
           expect(()=>{e.assert(t.condizione_fail, t.err_mess);}).to.not.throw();
           expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.not.throw();
         });
         it('assert ed error dsabilitato se disabling_errformance = true indipendentemente da ambiente', () => {
-          changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling); changeENV('DISABLING_ERRFORMANCE', true);
+          changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling); changeENV('DISABLING_ERRFORMANCE', 'true');
           const e = require(t.support)[tipo_test];
           expect(()=>{e.assert(t.condizione_fail, t.err_mess);}).to.not.throw();
           expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.not.throw();
@@ -206,6 +206,6 @@ function changeNODE_ENV(ambiente){
 function changeENV(nome, valore){
   const assert = require('assert');
   assert(typeof nome === 'string');
-  assert(valore !== undefined);
+  assert(typeof valore === 'string');
   process.env[nome] = valore;
 }

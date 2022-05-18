@@ -30,7 +30,7 @@ function checkErrformance(assertFunction, config_env_assert, config_env_error){
   assert(typeof assertFunction === 'function');
   if(!(config_env_assert === undefined || typeof config_env_assert === 'string' || typeof config_env_assert === 'function'))
     throw new TypeError('configurazione errata. deve essere stringa o callback');
-  if(!(config_env_error === undefined || typeof config_env_error === 'string' || typeof config_env_error === 'function' || typeof config_env_error === 'boolean'))
+  if(!(config_env_error === undefined || typeof config_env_error === 'string' || typeof config_env_error === 'function'))
     throw new TypeError('configurazione errata. deve essere stringa o callback');
 }
 
@@ -51,7 +51,7 @@ function functionErrorDisabilitabile(assertFunction, config_env_assert, config_e
   assert(!condizioneAssertPresenteErrorAssente(config_env_assert, config_env_error));
   switch(true){
     case config_env_error === undefined: return assertFunction;
-    case typeof config_env_error !== 'function':
+    case typeof config_env_error === 'string':
       if(config_env_error === DISABLING_ERRFORMANCE) return function(){/*funzione vuota*/};
       else return assertFunction;
     case typeof config_env_error === 'function': throw new Error('da sviluppare');

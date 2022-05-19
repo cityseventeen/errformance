@@ -74,12 +74,12 @@ describe('configurazione errformance', () => {
 });
 
 function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction){
-  describe('con assert di default del core di nodejs', () => {
     let Errformance;
     if(ErrformanceFunction.name === t.exports.Errformance.name) Errformance = ErrformanceFunction;
     else if(ErrformanceFunction.name === t.exports.ErrformanceConfiguration.name) Errformance = ErrformanceFunction(undefined);
     else throw new Error('argomento test suite errato');
-
+  
+  describe(`con assert di default del core di nodejs - ${ErrformanceFunction.name}`, () => {
     for(let tipo of [[], ['stringa'], 1, 0, -5, true, false, {}]){
       it(`Errformance restituisce errore con Errformer(${util.inspect(tipo)}`, () => {
         expect(()=>{Errformance(tipo);}).to.throw(/configurazione errata. deve essere stringa o callback/);
@@ -171,13 +171,13 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction){
       describe('non disabilitazione di assert ed err con Errformance(undefined)', () => {
         const tipo_test = 'Errformance_default_assert_undefined_var_for_assert_error';
         it('assert ed error non restituiscono errore se la condizione non si verifica', () => {
-          changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling);
+          changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling); changeENV('DISABLING_ERRFORMANCE', 'false');
           const e = require(t.support)[tipo_test];
           expect(()=>{e.assert(t.condizione_passed);}).to.not.throw();
           expect(()=>{e.error(t.condizione_passed);}).to.not.throw();
         });
         it('assert ed error abilitato con logica di default basata su nome ambiente', () => {
-          changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling);
+          changeNODE_ENV(t.env_that_causes_assert_disabling); changeENV('DISABLING_ERRFORMANCE', 'true');
           const e = require(t.support)[tipo_test];
           expect(()=>{e.assert(t.condizione_fail, t.err_mess);}).to.throw(t.err_mess);
           expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);

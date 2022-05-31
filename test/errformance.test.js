@@ -15,7 +15,8 @@ const t = {arg_valido_for_errformance: 'prod',
           support: `./support.test.js`,
           env_that_causes_assert_disabling: 'prod',
           env_that_doesnt_cause_assert_disabling: 'nonprod',
-          type_error_default: TypeError};
+          type_error_default: TypeError,
+          right_arg_for_assert_function: ()=>{}};
 Object.freeze(t);
 
 
@@ -23,13 +24,22 @@ describe('errformance con assertFunction già impostata di default', () => {
   testSuiteErrformanceWithAssertFunctionDefault(Errformance);
 });
 describe('configurazione errformance', () => {
-  it('undefined o funzione non restituisce errore', () => {
+  it('assert function = undefined o funzione non restituisce errore', () => {
     expect(()=>{ErrformanceConfiguration(undefined);}).to.not.throw();
     expect(()=>{ErrformanceConfiguration(t.callback_configurazione);}).to.not.throw();
   });
   for(let tipo of [[], ['stringa'], 'stringa', 1, 0, -5, true, false, {}]){
     it(`configurazione non funzione, ovvero con ${util.inspect(tipo)} restituisce errore`, () => {
       expect(()=>{ErrformanceConfiguration(tipo);}).to.throw(/configurazione errata. deve essere una funzione/);
+    });
+  }
+  it('type_error = undefined o funzione non restituisce errore', () => {
+    expect(()=>{ErrformanceConfiguration(t.right_arg_for_assert_function, undefined);}).to.not.throw();
+    expect(()=>{ErrformanceConfiguration(t.right_arg_for_assert_function, t.callback_configurazione);}).to.not.throw();
+  });
+  for(let tipo of [[], ['stringa'], 'stringa', 1, 0, -5, true, false, {}]){
+    it(`configurazione type_error non funzione, ovvero con ${util.inspect(tipo)} restituisce errore`, () => {
+      expect(()=>{ErrformanceConfiguration(t.right_arg_for_assert_function, tipo);}).to.throw(/configurazione errata. deve essere una funzione/);
     });
   }
   

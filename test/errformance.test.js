@@ -83,11 +83,11 @@ describe('configurazione errformance', () => {
 });
 
 function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, config = {assert_func: undefined, type_error: undefined}){
-    let Errformance;
-    if(ErrformanceFunction.name === t.exports.Errformance.name) Errformance = ErrformanceFunction;
-    else if(ErrformanceFunction.name === t.exports.ErrformanceConfiguration.name) Errformance = ErrformanceFunction(config);
-    else throw new Error('argomento test suite errato');
-  
+  let Errformance;
+  if(ErrformanceFunction.name === t.exports.Errformance.name) Errformance = ErrformanceFunction;
+  else if(ErrformanceFunction.name === t.exports.ErrformanceConfiguration.name) Errformance = ErrformanceFunction(config);
+  else throw new Error('argomento test suite errato');
+  const {assert_func, type_error} = config;
   describe(`con assert di default del core di nodejs - ${ErrformanceFunction.name}`, () => {
     for(let tipo of [[], ['stringa'], 1, 0, -5, true, false, {}]){
       it(`Errformance restituisce errore con Errformer(${util.inspect(tipo)}`, () => {
@@ -109,7 +109,7 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, conf
     it.skip('Errformance presenta SOLO i due metodi assert e error', () => {
 
     });
-    const testSuiteDisabilitazioneAssert = function(tipo_test){
+    const testSuiteDisabilitazioneAssert = function(tipo_test, type_error){
       it('assert ed error non restituiscono errore se la condizione non si verifica', () => {
         changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling);
         const e = require(t.support)[tipo_test];
@@ -120,7 +120,7 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, conf
         changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling);
         const e = require(t.support)[tipo_test];
         expect(()=>{e.assert(t.condizione_fail, t.err_mess);}).to.throw(t.err_mess);
-        expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);
+        expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(type_error, t.err_mess);
       });
       it('assert disabilitato con logica di default basata su nome ambiente', () => {
         changeNODE_ENV(t.env_that_causes_assert_disabling);
@@ -142,27 +142,27 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, conf
       
       describe('disabilitazione solo assert ed error attivo con Errformance(prod)', () => {
         const tipo_test = 'Errformance_default_assert_env_prod_disable_assert';
-        testSuiteDisabilitazioneAssert(tipo_test);
+        testSuiteDisabilitazioneAssert(tipo_test, type_error);
         it('error non disabilitato con logica di default basata su nome ambiente', () => {
           changeNODE_ENV(t.env_that_causes_assert_disabling);
           const e = require(t.support)[tipo_test];
-          expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);
+          expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(type_error, t.err_mess);
         });
       });
       describe('disabilitazione di assert ed error con Errformance(prod, custom)', () => {   
         const tipo_test = 'Errformance_default_assert_env_prod_disable_assert_env_custom_disable_error';
         describe('con disabling_errformance = false, disabilitazione assert segue regole su var ambiente', () => {
-          testSuiteDisabilitazioneAssert(tipo_test);
+          testSuiteDisabilitazioneAssert(tipo_test, type_error);
           it('error non disabilitato con logica di default basata su nome ambiente', () => {
             changeNODE_ENV(t.env_that_causes_assert_disabling);
             const e = require(t.support)[tipo_test];
-            expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);
+            expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(type_error, t.err_mess);
           });
         });
         it('error non disabilitato con logica di default basata su nome ambiente', () => {
           changeNODE_ENV(t.env_that_causes_assert_disabling);
           const e = require(t.support)[tipo_test];
-          expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);
+          expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(type_error, t.err_mess);
         });
         it('assert ed error disabilitato se disabling_errformance = true e ambiente prod', () => {
           changeNODE_ENV(t.env_that_causes_assert_disabling); changeENV('DISABLING_ERRFORMANCE', 'true');
@@ -189,7 +189,7 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, conf
           changeNODE_ENV(t.env_that_causes_assert_disabling); changeENV('DISABLING_ERRFORMANCE', 'true');
           const e = require(t.support)[tipo_test];
           expect(()=>{e.assert(t.condizione_fail, t.err_mess);}).to.throw(t.err_mess);
-          expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(t.type_error_default, t.err_mess);
+          expect(()=>{e.error(t.condizione_fail, t.err_mess);}).to.throw(type_error, t.err_mess);
         });
       });
       

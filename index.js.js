@@ -89,7 +89,7 @@ function checkConfig(assertCustomFunction, type_error){
     throw new TypeError(`configurazione errata. deve essere una funzione. Ricevuto ${typeof type_error}`);
 }
 
-
+module.exports = ErrformanceConfiguration({assert_func: undefined, type_error: undefined});
 module.exports.Errformance = ErrformanceConfiguration({assert_func: undefined, type_error: undefined});
 module.exports.ErrformanceConfiguration = ErrformanceConfiguration;
 if(ENVIRONMENT === 'dev')

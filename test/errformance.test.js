@@ -18,7 +18,13 @@ const t = {arg_valido_for_errformance: 'prod',
           right_arg_for_assert_function: ()=>{}};
 Object.freeze(t);
 
+describe('Errformance export di default', () => {
+  const err = require(`../`);
+  it('export di default', () => {
+    expect(err.name).to.eql(t.exports.Errformance.name);
+  });
 
+});
 describe('errformance con assertFunction già impostata di default', () => {
   testSuiteErrformanceWithAssertFunctionDefault(Errformance);
 });

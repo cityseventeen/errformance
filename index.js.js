@@ -3,7 +3,7 @@
  */
 const assert = require('assert');
 
-const AMBIENTE = process.env.NODE_ENV;
+const ENVIRONMENT = process.env.NODE_ENV;
 const DISABLING_ERRFORMANCE = process.env.DISABLING_ERRFORMANCE;
 
 const assertFunctionDefault = require('assert');
@@ -43,7 +43,7 @@ function functionAssertDisabilitabile(assertFunction, config_env_assert, config_
   assert(!condizioneAssertPresenteErrorAssente(config_env_assert, config_env_error));
   switch(typeof config_env_assert){
     case 'undefined': return assertFunction;
-    case 'string':  if(config_env_assert === AMBIENTE) return function(){/*funzione vuota*/};
+    case 'string':  if(config_env_assert === ENVIRONMENT) return function(){/*funzione vuota*/};
                     else return functionErrorDisabilitabile(assertFunction, config_env_assert, config_env_error);
     case 'function': throw new Error('da sviluppare');
     default: assert.fail('dato non previsto');
@@ -92,4 +92,6 @@ function checkConfig(assertCustomFunction, type_error){
 
 module.exports.Errformance = ErrformanceConfiguration({assert_func: undefined, type_error: undefined});
 module.exports.ErrformanceConfiguration = ErrformanceConfiguration;
+if(ENVIRONMENT === 'dev')
+  module.exports.test = {assertFunctionDefault, DEFAULT_ERROR_TYPE};
 

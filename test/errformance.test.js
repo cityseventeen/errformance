@@ -1,5 +1,5 @@
 /* global Promise, describe, it, __dirname, process*/
-const AMBIENTE = process.env.NODE_ENV;
+const ENVIRONMENT = process.env.NODE_ENV;
 
 const {expect, assert} = require('chai');
 const util = require('util');
@@ -45,7 +45,10 @@ describe('configurazione errformance', () => {
   testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration, {assert_func: undefined, type_error: undefined});
 
   describe('type error personalizzato', () => {
-    testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration, {assert_func: undefined, type_error: Error});
+    const config = {assert_func: undefined, type_error: Error};
+    if(ENVIRONMENT === 'dev')
+      assert.notEqual(require(`../`).DEFAULT_ERROR_TYPE, config.type_error);
+    testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration, config);
   });
   describe('con logica disattivazione e.assert su callback', () => {
     it.skip('abilita o disabilita assert in base ad altra variabile ambientale personalizzata nella callback', () => {
@@ -133,12 +136,12 @@ function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, conf
     };
     describe('disabilitazione assert ed error', () => {
       beforeEach(()=>{
-        process.env.NODE_ENV = AMBIENTE;
+        process.env.NODE_ENV = ENVIRONMENT;
         process.env.DISABLING_ERRFORMANCE = 'false';
         forceRequireSupport(t.support);
       });
       afterEach(()=>{
-        process.env.NODE_ENV = AMBIENTE;
+        process.env.NODE_ENV = ENVIRONMENT;
         process.env.DISABLING_ERRFORMANCE = 'false';
       });
       

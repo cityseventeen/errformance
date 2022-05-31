@@ -44,7 +44,9 @@ describe('configurazione errformance', () => {
   
   testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration, {assert_func: undefined, type_error: undefined});
 
-
+  describe('type error personalizzato', () => {
+    testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration, {assert_func: undefined, type_error: Error});
+  });
   describe('con logica disattivazione e.assert su callback', () => {
     it.skip('abilita o disabilita assert in base ad altra variabile ambientale personalizzata nella callback', () => {
 

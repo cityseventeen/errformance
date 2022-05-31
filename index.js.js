@@ -73,17 +73,14 @@ function condizioneAssertPresenteErrorAssente(config_env_assert, config_env_erro
   return !env_assert_presente && env_error_presente;
 }
 
-function ErrformanceConfiguration(assertCustomFunction, type_error){
-  checkConfig(assertCustomFunction, type_error);
-  
-  switch(typeof assertCustomFunction){
-    case 'undefined': return function(config_env_assert, config_env_error){
-        return new Errformance(assertFunctionDefault, type_error, config_env_assert, config_env_error);};
-    case 'function' : return function(config_env_assert, config_env_error){
-        return new Errformance(assertCustomFunction, type_error, config_env_assert, config_env_error);};
-    default: throw new Error();
-  }
-  
+function ErrformanceConfiguration({assert_func, type_error}){
+  checkConfig(assert_func, type_error);
+  if(assert_func === undefined) assert_func = assertFunctionDefault;
+  if(type_error === undefined) type_error = DEFAULT_ERROR_TYPE;
+
+  return function(config_env_assert, config_env_error){
+            return new Errformance(assertFunctionDefault, type_error, config_env_assert, config_env_error);
+         };
 }
 function checkConfig(assertCustomFunction, type_error){
   if(!(assertCustomFunction === undefined || typeof assertCustomFunction === 'function'))
@@ -93,6 +90,6 @@ function checkConfig(assertCustomFunction, type_error){
 }
 
 
-module.exports.Errformance = ErrformanceConfiguration(undefined, DEFAULT_ERROR_TYPE);
+module.exports.Errformance = ErrformanceConfiguration({assert_func: undefined, type_error: undefined});
 module.exports.ErrformanceConfiguration = ErrformanceConfiguration;
 

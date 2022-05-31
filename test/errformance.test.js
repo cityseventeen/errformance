@@ -7,7 +7,6 @@ const util = require('util');
 const {ErrformanceConfiguration, Errformance} = require(`../`);
 
 const t = {arg_valido_for_errformance: 'prod',
-          callback_configurazione: function(){},
           exports: {ErrformanceConfiguration, Errformance},
           condizione_fail: false,
           condizione_passed: true,
@@ -25,25 +24,25 @@ describe('errformance con assertFunction già impostata di default', () => {
 });
 describe('configurazione errformance', () => {
   it('assert function = undefined o funzione non restituisce errore', () => {
-    expect(()=>{ErrformanceConfiguration(undefined);}).to.not.throw();
-    expect(()=>{ErrformanceConfiguration(t.callback_configurazione);}).to.not.throw();
+    expect(()=>{ErrformanceConfiguration({assert_func: undefined});}).to.not.throw();
+    expect(()=>{ErrformanceConfiguration({assert_func: t.right_arg_for_assert_function});}).to.not.throw();
   });
   for(let tipo of [[], ['stringa'], 'stringa', 1, 0, -5, true, false, {}]){
     it(`configurazione non funzione, ovvero con ${util.inspect(tipo)} restituisce errore`, () => {
-      expect(()=>{ErrformanceConfiguration(tipo);}).to.throw(/configurazione errata. deve essere una funzione/);
+      expect(()=>{ErrformanceConfiguration({assert_func: tipo});}).to.throw(/configurazione errata. deve essere una funzione/);
     });
   }
   it('type_error = undefined o funzione non restituisce errore', () => {
-    expect(()=>{ErrformanceConfiguration(t.right_arg_for_assert_function, undefined);}).to.not.throw();
-    expect(()=>{ErrformanceConfiguration(t.right_arg_for_assert_function, t.callback_configurazione);}).to.not.throw();
+    expect(()=>{ErrformanceConfiguration({assert_func: t.right_arg_for_assert_function, type_error: undefined});}).to.not.throw();
+    expect(()=>{ErrformanceConfiguration({assert_func: t.right_arg_for_assert_function, type_error: t.callback_configurazione});}).to.not.throw();
   });
   for(let tipo of [[], ['stringa'], 'stringa', 1, 0, -5, true, false, {}]){
     it(`configurazione type_error non funzione, ovvero con ${util.inspect(tipo)} restituisce errore`, () => {
-      expect(()=>{ErrformanceConfiguration(t.right_arg_for_assert_function, tipo);}).to.throw(/configurazione errata. deve essere una funzione/);
+      expect(()=>{ErrformanceConfiguration({assert_func: t.right_arg_for_assert_function, type_error: tipo});}).to.throw(/configurazione errata. deve essere una funzione/);
     });
   }
   
-  testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration);
+  testSuiteErrformanceWithAssertFunctionDefault(ErrformanceConfiguration, {assert_func: undefined, type_error: undefined});
 
 
   describe('con logica disattivazione e.assert su callback', () => {
@@ -83,10 +82,10 @@ describe('configurazione errformance', () => {
   });
 });
 
-function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction){
+function testSuiteErrformanceWithAssertFunctionDefault(ErrformanceFunction, config = {assert_func: undefined, type_error: undefined}){
     let Errformance;
     if(ErrformanceFunction.name === t.exports.Errformance.name) Errformance = ErrformanceFunction;
-    else if(ErrformanceFunction.name === t.exports.ErrformanceConfiguration.name) Errformance = ErrformanceFunction(undefined);
+    else if(ErrformanceFunction.name === t.exports.ErrformanceConfiguration.name) Errformance = ErrformanceFunction(config);
     else throw new Error('argomento test suite errato');
   
   describe(`con assert di default del core di nodejs - ${ErrformanceFunction.name}`, () => {

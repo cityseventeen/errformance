@@ -1,4 +1,13 @@
 # Performance Error
+[![Test][test-pass-img]][test-pass-url]
+[![Commit Number][commit-number-img]][commit-number-url]
+
+[test-pass-img]: https://github.com/CitySeventeen/Errformance/workflows/Node.js%20CI/badge.svg
+[test-pass-url]: https://github.com/CitySeventeen/Errformance/actions/workflows/node.js.yml
+
+[commit-number-img]: https://img.shields.io/github/commit-activity/m/CitySeventeen/Errformance
+[commit-number-url]: https://github.com/CitySeventeen/Errformance/commits/main
+
 Permette in modo agevole la disabilitazione degli assert inseriti a scopo di unit test, ad esempio in ambiente di produzione per migliorare le performance.
 Pensato anche per chi scrive package e moduli, si può configurare la restituzione di errori o assert senza modificare nulla nel codice;
 in questo modo, si possono inserire assert puri per le funzioni interne, o private, e tipi `errformance` nelle interfacce verso l'utilizzatore,

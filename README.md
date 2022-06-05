@@ -16,7 +16,7 @@ così che possa decidere lui se mantenerli come assert disattivabili in produzio
 ## Esempio di utilizzo
 ```js
 //Modulo A
-const e = require('errformance')('dev') //gli assert sono disattivati se l'ambiente è diverso da dev, oppure si può inserire una callback più complesa per le regole di disattivazione
+const e = require('errformance')('prod') //gli assert sono attivati se l'ambiente è diverso da prod, oppure si può inserire una callback più complesa per le regole di disattivazione
 
 class interfaccia{
     metodo(arg){

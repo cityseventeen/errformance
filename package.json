@@ -9,8 +9,9 @@
   "author": "Raffaele Balsamo <raffaelebalsamo91@gmail.com>",
   "description": "Permette di decidere se utilizzare assert o throw error in base a configurazione iniziale, e di poter disabilitare gli assert ad esempio in base all'ambiente per migliorare le performance in produzione.",
   "scripts": {
-    "test": "NODE_ENV=dev node ./node_modules/mocha/bin/mocha",
-    "windows test": "SET NODE_ENV=dev& node ./node_modules/mocha/bin/mocha"
+    "test": "NODE_ENV=prod node ./node_modules/mocha/bin/mocha",
+    "windows test": "SET NODE_ENV=dev& node ./node_modules/mocha/bin/mocha",
+    "dev test": "NODE_ENV=dev node ./node_modules/mocha/bin/mocha"
   },
   "bugs": {
     "url": "https://github.com/CitySeventeen/Errformance/issues"

@@ -28,6 +28,34 @@ describe('Errformance export di default', () => {
 describe('errformance con assertFunction già impostata di default', () => {
   testSuiteErrformanceWithAssertFunctionDefault(Errformance);
 });
+describe('argument of error/assert', () => {
+  let e;
+  before(()=>{
+    changeNODE_ENV(t.env_that_doesnt_cause_assert_disabling);
+    process.env.DISABLING_ERRFORMANCE = 'false';
+    forceRequireSupport(t.support);
+    e = require(t.support)['Errformance_default_assert_env_prod_disable_assert'];
+  });
+  after(()=>{
+    process.env.NODE_ENV = ENVIRONMENT;
+    process.env.DISABLING_ERRFORMANCE = 'false';
+  });
+
+  it('as value return expected', () => {
+    expect(()=>{e.assert(t.condizione_fail, 'fail message');}).to.throw('fail message');
+    expect(()=>{e.error(t.condizione_fail, 'fail message');}).to.throw('fail message');
+    expect(()=>{e.assert(t.condizione_passed, 'fail message');}).to.not.throw();
+    expect(()=>{e.error(t.condizione_passed, 'fail message');}).to.not.throw();
+  });
+  it.skip('as function return expected', () => {
+    ///// to implement
+    expect(()=>{e.assert(()=>{return [t.condizione_fail, 'fail message'];});}).to.throw('fail message');
+    expect(()=>{e.error(()=>{return [t.condizione_fail, 'fail message'];});}).to.throw('fail message');
+    expect(()=>{e.assert(()=>{return [t.condizione_passed, 'fail message'];});}).to.not.throw();
+    expect(()=>{e.error(()=>{return [t.condizione_passed, 'fail message'];});}).to.not.throw();
+  });
+
+});
 describe('configurazione errformance', () => {
   it('assert function = undefined o funzione non restituisce errore', () => {
     expect(()=>{ErrformanceConfiguration({assert_func: undefined});}).to.not.throw();
@@ -86,10 +114,6 @@ describe('configurazione errformance', () => {
 
       });
     });
-  });
-  
-  describe('', () => {
-
   });
 });
 
